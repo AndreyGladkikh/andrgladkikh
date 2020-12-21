@@ -4,14 +4,26 @@
 namespace AndrGladkikh\Kernel;
 
 
+use AndrGladkikh\Request\RequestFactory;
+
 class Kernel
 {
+    protected $rootDir;
 
+    public function __construct()
+    {
+        $this->rootDir = $_SERVER['DOCUMENT_ROOT'];
+    }
+
+    protected function loadConfig()
+    {
+
+    }
 
     public function handleRequest()
     {
-        $request = $_SERVER['REQUEST_URI'];
-        $documentRoot = $_SERVER['DOCUMENT_ROOT'];
-        var_dump($documentRoot);
+        $request = (new RequestFactory())->createRequest();
+
+        var_dump($request);
     }
 }
