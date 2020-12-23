@@ -6,12 +6,11 @@ namespace AndrGladkikh\Request;
 
 class RequestFactory
 {
-    public function createRequest(): Request
+    public static function createRequest(): Request
     {
-        $requestMethod = $_SERVER['REQUEST_METHOD'];
         $urlPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $params = [];
-        switch($requestMethod) {
+        switch($_SERVER['REQUEST_METHOD']) {
             case Request::METHOD_GET:
                 $params = $_GET;
                 break;
