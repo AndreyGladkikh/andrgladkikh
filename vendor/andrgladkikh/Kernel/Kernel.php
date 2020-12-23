@@ -5,6 +5,7 @@ namespace AndrGladkikh\Kernel;
 
 
 use AndrGladkikh\Kernel\Controller\ControllerResolver;
+use AndrGladkikh\Request\Request;
 use AndrGladkikh\Request\RequestFactory;
 
 class Kernel
@@ -33,9 +34,9 @@ class Kernel
 
     public function handleRequest()
     {
-        $request = RequestFactory::createRequest();
-        $controller = ControllerResolver::getControllerName($request);
-
-        var_dump($request);
+        $request = Request::createRequest();
+        $requestHandler = PathResolver::findRequestHandler($request->getUrlPath(), $this->routes);
+        $controller = new $requestHandler['controllerClassName'];
+        return $controller->{$requestHandler['methodName']}();
     }
 }

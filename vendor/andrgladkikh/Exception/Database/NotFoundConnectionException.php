@@ -8,5 +8,5 @@ use Exception;
 
 class NotFoundConnectionException extends Exception
 {
-
+// todo
 }

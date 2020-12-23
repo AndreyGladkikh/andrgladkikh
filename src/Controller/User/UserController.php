@@ -6,9 +6,13 @@ namespace App\Controller\User;
 
 class UserController
 {
+    public function __construct()
+    {
+
+    }
+
     public function index()
     {
 
-        var_dump('user controller test');
     }
 }

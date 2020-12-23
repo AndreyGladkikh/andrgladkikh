@@ -26,7 +26,7 @@ class Database
             throw new NotFoundConnectionException(sprintf("Connection '%s' doesn't exist", $connectionName));
         }
         $config = $this->config[$connectionName];
-//        $port = 5432;
+//        $port = 5432; todo
         if ($config['driver'] === self::DRIVER_PDO_PGSQL) {
             $dsn = sprintf(
                 'pgsql:host=%s;port=%s;dbname=%s;user=%s;password=%s',
