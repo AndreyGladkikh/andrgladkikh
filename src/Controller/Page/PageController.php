@@ -4,12 +4,12 @@
 namespace App\Controller\Page;
 
 
-class PageController
+use AndrGladkikh\Controller\AbstractController;
+
+class PageController extends AbstractController
 {
     public function index()
     {
-        echo 'foo';
-        $dbg = 1;
-        return 'bar';
+        $this->render('page/index');
     }
 }

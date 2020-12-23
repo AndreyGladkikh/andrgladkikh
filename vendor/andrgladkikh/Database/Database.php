@@ -22,15 +22,19 @@ class Database
 
     public function getConnection(string $connectionName = 'default'): Connection
     {
-        if (!array_key_exists($connectionName, $this->config)) {
+        if (!array_key_exists($connectionName, $this->config['connections'])) {
             throw new NotFoundConnectionException(sprintf("Connection '%s' doesn't exist", $connectionName));
         }
-        $config = $this->config[$connectionName];
+        $connectionConfig = $this->config['connections'][$connectionName];
 //        $port = 5432; todo
-        if ($config['driver'] === self::DRIVER_PDO_PGSQL) {
+        if ($connectionConfig['driver'] === self::DRIVER_PDO_PGSQL) {
             $dsn = sprintf(
                 'pgsql:host=%s;port=%s;dbname=%s;user=%s;password=%s',
-                $config['host'], $config['port'], $config['dbname'], $config['username'], $config['password']
+                $connectionConfig['host'],
+                $connectionConfig['port'],
+                $connectionConfig['dbname'],
+                $connectionConfig['username'],
+                $connectionConfig['password']
             );
         }
         if (empty($dsn)) {
