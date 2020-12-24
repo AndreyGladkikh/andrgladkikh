@@ -15,6 +15,11 @@ class Database
      */
     private $config;
 
+    /**
+     * @var array
+     */
+    private $connections;
+
     public function __construct(array $config)
     {
         $this->config = $config;
@@ -22,11 +27,13 @@ class Database
 
     public function getConnection(string $connectionName = 'default'): Connection
     {
+        if(array_key_exists($connectionName, $this->connections)) {
+            return $this->connections[$connectionName];
+        }
         if (!array_key_exists($connectionName, $this->config['connections'])) {
             throw new NotFoundConnectionException(sprintf("Connection '%s' doesn't exist", $connectionName));
         }
         $connectionConfig = $this->config['connections'][$connectionName];
-//        $port = 5432; todo
         if ($connectionConfig['driver'] === self::DRIVER_PDO_PGSQL) {
             $dsn = sprintf(
                 'pgsql:host=%s;port=%s;dbname=%s;user=%s;password=%s',
@@ -40,6 +47,7 @@ class Database
         if (empty($dsn)) {
             throw new NotFoundConnectionException(sprintf("Connection '%s' doesn't exist", $connectionName));
         }
-        return new Connection($dsn);
+        $this->connections[$connectionName] = new Connection($dsn);
+        return $this->connections[$connectionName];
     }
 }
