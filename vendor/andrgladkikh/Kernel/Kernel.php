@@ -4,9 +4,9 @@
 namespace AndrGladkikh\Kernel;
 
 
-use AndrGladkikh\Kernel\Controller\ControllerResolver;
+use AndrGladkikh\Database\Database;
+use AndrGladkikh\DependencyInjection\Container;
 use AndrGladkikh\Request\Request;
-use AndrGladkikh\Request\RequestFactory;
 
 class Kernel
 {
@@ -30,6 +30,7 @@ class Kernel
         $this->rootDir = $_SERVER['DOCUMENT_ROOT'];
         $this->configDir = realpath($this->rootDir . "/../config");
         $this->routes = require_once $this->configDir . "/routes.php";
+        $this->initializeContainer();
     }
 
     public function handleRequest()
@@ -38,5 +39,16 @@ class Kernel
         $requestHandler = PathResolver::findRequestHandler($request->getUrlPath(), $this->routes);
         $controller = new $requestHandler['controllerClassName'];
         return $controller->{$requestHandler['methodName']}();
+    }
+
+    private function initializeContainer()
+    {
+        $databaseConfig = require($this->configDir . '/database.php');
+
+        $container = Container::getInstance();
+        $container->set('config_database', $databaseConfig);
+        $container->set(Database::class , function($container) {
+            return new Database($container->get('config_database'));
+        });
     }
 }
